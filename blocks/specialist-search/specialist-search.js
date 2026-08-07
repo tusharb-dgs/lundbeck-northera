@@ -1,74 +1,196 @@
-/**
- * specialist-search — static visual replica of the source Google Maps ZIP
- * lookup widget. The live map search is not migrated; this renders the same
- * chrome (helper line, ZIP field, Terms checkbox, SEARCH NOW button) so the
- * page matches the source visually.
- *
- * Authoring rows (one cell each):
- *   1. helper line
- *   2. ZIP field placeholder
- *   3. Terms & Conditions acknowledgement (may contain a link)
- *   4. submit button label
- *
- * @param {Element} block
- */
-export default function decorate(block) {
-  const rows = [...block.children];
-  const [helperRow, placeholderRow, termsRow, buttonRow] = rows;
+import { createSearchForm, validate } from './form.js';
+import { createResultsSection } from './templates.js';
+import { initializeMap, getCoordsAsync } from './map.js';
+import { getSpecialistData } from './api.js';
+import { renderResults, filterProviders } from './results.js';
 
-  const helper = helperRow ? helperRow.textContent.trim() : '';
-  const placeholder = placeholderRow ? placeholderRow.textContent.trim() : '';
-  const buttonLabel = buttonRow ? buttonRow.textContent.trim() : '';
-  // preserve the Terms link markup authored in the fragment
-  const termsContent = termsRow ? termsRow.querySelector(':scope > div') || termsRow : null;
+export default async function decorate(block) {
+  const config = getConfig(block);
 
-  const form = document.createElement('div');
-  form.className = 'specialist-search-form';
+  const form = createSearchForm(config);
 
-  if (helper) {
-    const p = document.createElement('p');
-    p.className = 'specialist-search-helper';
-    p.textContent = helper;
-    form.append(p);
-  }
+  const resultSection =
+    createResultsSection();
 
-  const field = document.createElement('div');
-  field.className = 'specialist-search-field';
-
-  const input = document.createElement('input');
-  input.type = 'text';
-  input.className = 'specialist-search-zip';
-  input.setAttribute('maxlength', '5');
-  input.setAttribute('autocomplete', 'off');
-  if (placeholder) input.setAttribute('placeholder', placeholder);
-  input.setAttribute('aria-label', placeholder || 'ZIP code');
-  field.append(input);
-
-  if (termsContent) {
-    const terms = document.createElement('label');
-    terms.className = 'specialist-search-terms';
-    const checkbox = document.createElement('input');
-    checkbox.type = 'checkbox';
-    checkbox.className = 'specialist-search-checkbox';
-    const mark = document.createElement('span');
-    mark.className = 'specialist-search-checkmark';
-    const text = document.createElement('span');
-    text.className = 'specialist-search-terms-text';
-    while (termsContent.firstChild) text.append(termsContent.firstChild);
-    terms.append(checkbox, mark, text);
-    field.append(terms);
-  }
-
-  if (buttonLabel) {
-    const button = document.createElement('button');
-    button.type = 'button';
-    button.className = 'specialist-search-submit';
-    button.textContent = buttonLabel;
-    field.append(button);
-  }
-
-  form.append(field);
-
-  block.textContent = '';
+  block.innerHTML = '';
   block.append(form);
+  block.append(resultSection);
+
+   initializeMap(
+    config.googleMapKey
+  );
+
+  attachSearchHandler(
+    form,
+    resultSection,
+    config,
+  );
+}
+
+function getConfig(block) {
+  const rows = [...block.children];
+
+  const googleMapKey =
+    rows[0]?.children[1]?.textContent.trim() || '';
+
+  const apiEndpoint =
+    rows[1]?.children[1]?.textContent.trim() || '';
+
+  const helper =
+    rows[2]?.children[1]?.textContent.trim() || '';
+
+  const placeholder =
+    rows[3]?.children[1]?.textContent.trim() || '';
+
+  const termsRow =
+    rows[4]?.children[1];
+
+  const buttonLabel =
+    rows[5]?.children[1]?.textContent.trim()
+    || 'SEARCH NOW';
+
+  const termsContent =
+    termsRow?.querySelector(':scope > div')
+    || termsRow;
+
+  return {
+    googleMapKey,
+    apiEndpoint,
+    helper,
+    placeholder,
+    buttonLabel,
+    termsContent:
+      termsContent?.innerHTML || '',
+  };
+}
+
+function attachSearchHandler(
+  form,
+  resultSection,
+  config,
+) {
+  const zipInput =
+    form.querySelector('.specialist-search-zip');
+
+  const checkbox =
+    form.querySelector('.specialist-search-checkbox');
+
+  const button =
+    form.querySelector('.specialist-search-submit');
+
+  const errorBox =
+    form.querySelector('.specialist-search-error');
+
+  button.addEventListener(
+    'click',
+    async () => {
+      const zip =
+        zipInput.value.trim();
+
+      const error = validate(
+        zip,
+        checkbox.checked,
+      );
+
+      if (error) {
+        errorBox.textContent = error;
+        return;
+      }
+
+      errorBox.textContent = '';
+
+      try {
+        const coords =
+          await getCoordsAsync(zip);
+
+        console.log(
+          'Received coordinates:',
+          coords,
+        );
+
+        const specialistData =
+          await getSpecialistData(
+            coords,
+            config.apiEndpoint,
+            zip,
+          );
+
+        const providers =
+          typeof specialistData.MemberList === 'string'
+            ? JSON.parse(
+                specialistData.MemberList,
+              )
+            : specialistData.MemberList;
+
+        form.style.display = 'none';
+
+        resultSection.style.display =
+          'block';
+
+        renderResults(
+          resultSection,
+          providers,
+          zip,
+        );
+
+        attachRadiusHandler(
+          resultSection,
+          providers,
+          zip,
+        );
+
+      } catch (err) {
+        console.error(err);
+
+        errorBox.textContent =
+          'Something went wrong. Please try again.';
+      }
+    },
+  );
+}
+
+function attachRadiusHandler(
+  resultSection,
+  providers,
+  zip,
+) {
+  const radiusSelect =
+    resultSection.querySelector(
+      '#cmp-specialist__selectradius',
+    );
+
+  const DEFAULT_RADIUS = 10;
+
+  let filteredProviders =
+    filterProviders(
+      providers,
+      DEFAULT_RADIUS,
+    );
+
+  renderResults(
+    resultSection,
+    filteredProviders,
+    zip,
+  );
+
+  radiusSelect.addEventListener(
+    'change',
+    (e) => {
+      const radius = Number(
+        e.target.value,
+      );
+
+      const filteredProviders =
+        filterProviders(
+          providers,
+          radius,
+        );
+
+      renderResults(
+        resultSection,
+        filteredProviders,
+        zip,
+      );
+    },
+  );
 }

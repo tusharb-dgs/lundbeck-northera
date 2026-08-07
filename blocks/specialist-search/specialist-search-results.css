@@ -1,0 +1,325 @@
+@import url('./specialist-search-tokens.css');
+
+/* --------------------------------------------------
+   Search Banner
+-------------------------------------------------- */
+
+.specialist-search {
+  width: 100%;
+  max-width: 100%;
+  margin-inline: 0;
+  min-height: var(--specialist-search-banner-min-height);
+  background-image: var(--specialist-search-banner-image);
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  box-sizing: border-box;
+}
+
+.specialist-search .specialist-search-form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  max-width: 385px;
+  padding: 30px;
+  background: #fff;
+  box-shadow: 0 3px 3px 4px rgb(0 0 0 / 20%);
+  box-sizing: border-box;
+}
+
+.specialist-search .specialist-search-helper {
+  margin: 0;
+  font-family: var(--specialist-search-helper-font-family);
+  font-size: var(--specialist-search-helper-size);
+  color: var(--specialist-search-helper-color);
+}
+
+.specialist-search .specialist-search-field {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.specialist-search .specialist-search-zip {
+  width: 100%;
+  height: var(--specialist-search-zip-height);
+  padding: 0 15px 0 50px;
+  border: 1px solid var(--brand-grey);
+  background-color: #fff;
+  background-image: var(--specialist-search-zip-icon);
+  background-repeat: no-repeat;
+  background-position: 15px center;
+  background-size: 22px;
+  font-size: var(--specialist-search-zip-size);
+  color: var(--specialist-search-zip-color);
+  box-sizing: border-box;
+}
+
+.specialist-search .specialist-search-zip:focus {
+  outline: 2px solid var(--brand-cyan);
+  outline-offset: 1px;
+}
+
+.specialist-search .specialist-search-terms {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+}
+
+.specialist-search .specialist-search-checkbox {
+  width: 18px;
+  height: 18px;
+  margin-top: 3px;
+  accent-color: var(--brand-cyan);
+}
+
+.specialist-search .specialist-search-terms-text,
+.specialist-search .specialist-search-terms-text p {
+  margin: 0;
+  font-size: 16px;
+  line-height: 1.6;
+}
+
+.specialist-search .specialist-search-terms-text a {
+  color: var(--brand-cyan);
+  text-decoration: none;
+}
+
+.specialist-search .specialist-search-submit {
+  width: 100%;
+  border: 0;
+  padding: var(--specialist-search-submit-padding);
+  background: var(--specialist-search-submit-background);
+  color: var(--specialist-search-submit-color);
+  font-family: var(--specialist-search-submit-font-family);
+  font-size: var(--specialist-search-submit-size);
+  box-shadow: var(--specialist-search-submit-shadow);
+  cursor: pointer;
+  transition: all .2s ease;
+}
+
+.specialist-search .specialist-search-submit:hover {
+  background: var(--specialist-search-submit-hover-background);
+  color: var(--specialist-search-submit-hover-color);
+  box-shadow: var(--specialist-search-submit-hover-shadow);
+}
+
+.specialist-search-error {
+  color: #c40000;
+  font-size: 14px;
+  line-height: 20px;
+}
+
+/* --------------------------------------------------
+   Results Section
+-------------------------------------------------- */
+
+.cmp-specialist__result-section {
+  display: none;
+  background: #f5f5f5;
+}
+
+/* --------------------------------------------------
+   Map
+-------------------------------------------------- */
+
+.cmp-result__googlemap {
+  width: 100%;
+}
+
+.cmp-googlemap__maparea {
+  height: 340px;
+  background: #e2e2e2;
+  position: relative;
+}
+
+.cmp-googlemap__placeholder {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  color: #666;
+  text-align: center;
+  background:
+    linear-gradient(
+      45deg,
+      #ececec,
+      #dcdcdc
+    );
+}
+
+.cmp-googlemap__placeholder strong {
+  font-size: 22px;
+}
+
+/* --------------------------------------------------
+   Results Header
+-------------------------------------------------- */
+
+.cmp-specialist__result {
+  padding: 40px;
+}
+
+.cmp-specialist__result > p {
+  margin: 0 0 16px;
+  font-size: 48px;
+  line-height: 1.1;
+  color: #18486a;
+  font-family: var(--heading-heavy-font-family);
+}
+
+.cmp-result__doctormiles {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px;
+  font-size: 15px;
+  font-weight: 700;
+  color: #333;
+}
+
+.cmp-result__length,
+.cmp-result__zipCode {
+  font-weight: 700;
+}
+
+#cmp-specialist__selectradius {
+  min-width: 65px;
+  border: 1px solid #ccc;
+  background: #fff;
+  padding: 2px 4px;
+}
+
+/* --------------------------------------------------
+   Result List
+-------------------------------------------------- */
+
+.cmp-result__lists {
+  padding: 0 40px 50px;
+}
+
+.cmp-panel {
+  border-bottom: 1px solid #b7b7b7;
+  padding: 24px 0;
+}
+
+.cmp-specialistsdetails .row {
+  display: grid;
+  grid-template-columns:
+    1.2fr
+    1.2fr
+    2fr
+    120px;
+  gap: 25px;
+  align-items: start;
+}
+
+.cmp-coloumn__doctorname {
+  font-size: 18px;
+  font-weight: 700;
+  color: #333;
+}
+
+.cmp-coloumn__specialty {
+  font-size: 18px;
+  font-style: italic;
+  font-weight: 700;
+  color: #333;
+}
+
+.cmp-addressContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.cmp-coloumn__address {
+  font-size: 17px;
+  line-height: 1.5;
+  color: #333;
+}
+
+.cmp-coloumn__telNumber {
+  color: var(--brand-cyan);
+  text-decoration: none;
+  font-weight: 700;
+}
+
+.cmp-coloumn__telNumber:hover {
+  text-decoration: underline;
+}
+
+.cmp-coloumn__miles {
+  font-size: 18px;
+  font-weight: 700;
+  text-align: right;
+  color: #333;
+}
+
+/* --------------------------------------------------
+   Hide Mobile Layout
+-------------------------------------------------- */
+
+.cmp-specialistsdetails__mobile {
+  display: none;
+}
+
+/* --------------------------------------------------
+   Tablet
+-------------------------------------------------- */
+
+@media (width >= 768px) {
+  .specialist-search {
+    justify-content: flex-end;
+    padding-right: 0px;
+  }
+
+  .specialist-search .specialist-search-form {
+    width: 385px;
+  }
+}
+
+/* --------------------------------------------------
+   Mobile
+-------------------------------------------------- */
+
+@media (width <= 767px) {
+  .specialist-search {
+    padding: 20px;
+    justify-content: center;
+  }
+
+  .specialist-search .specialist-search-form {
+    width: 100%;
+  }
+
+  .cmp-specialist__result {
+    padding: 25px 20px;
+  }
+
+  .cmp-specialist__result > p {
+    font-size: 34px;
+  }
+
+  .cmp-result__lists {
+    padding: 0 20px 30px;
+  }
+
+  .cmp-specialistsdetails .row {
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
+
+  .cmp-coloumn__miles {
+    text-align: left;
+  }
+
+  .cmp-googlemap__maparea {
+    height: 240px;
+  }
+}

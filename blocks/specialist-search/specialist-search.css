@@ -1,5 +1,5 @@
 @import url('./specialist-search-tokens.css');
-
+@import url('./specialist-search-results.css');
 /* ══════════════════════════════════════════════════════════════
    specialist-search — static visual replica of the source
    Google-Maps ZIP lookup form (helper line + ZIP field + Terms
@@ -145,7 +145,7 @@ main .section.find-specialist > div > p:last-child:not(:has(picture)) {
 @media (width >= 768px) {
   .specialist-search {
     justify-content: flex-end;
-    padding-right: 140px;
+    padding-right: 40px;
   }
 
   .specialist-search .specialist-search-form {
