@@ -1,6 +1,8 @@
 import { loadScript } from '../../scripts/aem.js';
 
+const markers = new Map();
 let map;
+let activeMarker = null;
 
 export async function initializeMap(apiKey) {
   await loadScript(
@@ -18,16 +20,23 @@ export async function initializeMap(apiKey) {
       'cmp-googlemap__placeholder',
     );
 
-  map = new google.maps.Map(mapElement, {
-    center: {
-      lat: 37.09,
-      lng: -95.71,
-    },
-    zoom: 4,
-    mapTypeControl: false,
-    streetViewControl: false,
-    zoomControl: true,
-  });
+map = new google.maps.Map(mapElement, {
+  center: {
+    lat: 37.09,
+    lng: -95.71,
+  },
+  zoom: 8,
+
+//   zoomControl: true,
+  mapTypeControl: true,
+  streetViewControl: true,
+  fullscreenControl: true,
+//   streetViewControlOptions: {
+//     position: google.maps.ControlPosition.RIGHT_BOTTOM,
+//     },
+    disableDefaultUI: false,
+    // mapTypeId:google.maps.MapTypeId.ROADMAP
+});
 
   return map;
 }
@@ -50,7 +59,6 @@ export async function getCoordsAsync(
   return null;
 }
 
-const markers = new Map();
 
 
 export function registerProviderMarkers(
@@ -61,21 +69,21 @@ markers.forEach((marker) => {
 });
 
 markers.clear();
-  providers.forEach((provider) => {
-    const marker = new google.maps.Marker({
-      position: {
-        lat: Number(provider.latitude),
-        lng: Number(provider.longitude),
-      },
-      map,
-      title: `${provider.firstName} ${provider.lastName}`,
-    });
+//   providers.forEach((provider) => {
+//     const marker = new google.maps.Marker({
+//       position: {
+//         lat: Number(provider.latitude),
+//         lng: Number(provider.longitude),
+//       },
+//       map,
+//       title: `${provider.firstName} ${provider.lastName}`,
+//     });
 
-    markers.set(
-      provider.lundbeckID,
-      marker,
-    );
-  });
+//     markers.set(
+//       provider.lundbeckID,
+//       marker,
+//     );
+//   });
 }
 export function focusProviderOnMap(
   providerId,
@@ -100,4 +108,31 @@ export function focusProviderOnMap(
   setTimeout(() => {
     marker.setAnimation(null);
   }, 1500);
+}
+
+
+export function showLocationOnMap(
+  lat,
+  lng,
+  zoom = 12,
+) {
+  // Remove existing marker
+  if (activeMarker) {
+    activeMarker.setMap(null);
+  }
+
+  activeMarker = new google.maps.Marker({
+    position: {
+      lat: Number(lat),
+      lng: Number(lng),
+    },
+    map,
+  });
+
+  map.panTo({
+    lat: Number(lat),
+    lng: Number(lng),
+  });
+
+  map.setZoom(zoom);
 }

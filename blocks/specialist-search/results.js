@@ -2,7 +2,7 @@ import { renderProvider } from './templates.js';
 
 import {
   registerProviderMarkers,
-  focusProviderOnMap,
+  focusProviderOnMap, showLocationOnMap
 } from './map.js';
 
 export function renderResults(
@@ -37,25 +37,39 @@ export function renderResults(
     );
 
   cards.forEach((card) => {
-    card.addEventListener(
-      'click',
-      () => {
-        cards.forEach((item) => {
-          item.classList.remove(
-            'active',
-          );
-        });
+   card.addEventListener(
+        'click',
+        () => {
+            cards.forEach((item) =>
+            item.classList.remove('active'),
+            );
 
-        card.classList.add(
-          'active',
-        );
+            card.classList.add('active');
 
-        focusProviderOnMap(
-          card.dataset.providerId,
-        );
+            const provider =
+            providers.find(
+                (item) =>
+                item.lundbeckID ===
+                card.dataset.providerId,
+            );
 
-        document.getElementById('cmp-googlemap__placeholder')?.scrollIntoView({ behavior: 'smooth' });
-      },
+            if (provider) {
+            showLocationOnMap(
+                provider.latitude,
+                provider.longitude,
+                15,
+            );
+
+            document
+                .querySelector(
+                '.cmp-result__googlemap',
+                )
+                ?.scrollIntoView({
+                behavior: 'smooth',
+                block: 'start',
+                });
+            }
+        },
     );
   });
 }

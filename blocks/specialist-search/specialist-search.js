@@ -1,6 +1,6 @@
 import { createSearchForm, validate } from './form.js';
 import { createResultsSection } from './templates.js';
-import { initializeMap, getCoordsAsync } from './map.js';
+import { initializeMap, getCoordsAsync, showLocationOnMap } from './map.js';
 import { getSpecialistData } from './api.js';
 import { renderResults } from './results.js';
 
@@ -107,6 +107,12 @@ function attachSearchHandler(
           'Received coordinates:',
           coords,
         );
+
+        showLocationOnMap(
+  coords.lat,
+  coords.lng,
+  10,
+);
 
         const DEFAULT_RADIUS = 10;
 
