@@ -216,6 +216,10 @@ export function renderProvider(provider) {
     'cmp-coloumn__addressSection',
   );
 
+  const addressIcon =document.createElement('img');
+  addressIcon.src = './icons/map-marker.svg';
+  addressIcon.alt = 'Address Icon';
+
   const addressContainer =
     document.createElement('div');
 
@@ -256,6 +260,10 @@ export function renderProvider(provider) {
   addressContainer.append(
     address,
     phoneLink,
+  );
+
+    addressSection.append(
+    addressIcon
   );
 
   addressSection.append(

@@ -145,7 +145,7 @@ main .section.find-specialist > div > p:last-child:not(:has(picture)) {
 @media (width >= 768px) {
   .specialist-search {
     justify-content: flex-end;
-    padding-right: 40px;
+    /* padding-right: 40px; */
   }
 
   .specialist-search .specialist-search-form {
@@ -174,10 +174,54 @@ main .section.find-specialist > div > p:last-child:not(:has(picture)) {
 }
 
 .cmp-panel:hover {
-  background: #f8fbfc;
+  /* background: #f8fbfc; */
 }
 
 .cmp-panel.active {
   background: #eef9fc;
   border-left: 4px solid #00b5e2;
+}
+
+/* .cmp-specialistsdetails__coloumn::before
+{content:'\e062';
+    position: absolute;
+    font-size: 45px;
+    color: #02bded;
+  } */
+
+  .cmp-specialistsdetails__coloumn{
+    display: flex;
+  }
+
+  .cmp-specialistsdetails__coloumn  img {
+  /* transform: scale(0.4); */
+  transform-origin: center; /* Keeps the image centered while shrinking */
+}
+
+
+/* Target only the first child inside the flex container */
+/* .cmp-specialistsdetails__coloumn > :img {
+  align-self: flex-start;
+} */
+
+/* .cmp-specialistsdetails__coloumn.cmp-coloumn__addressSection > img {
+  align-self: flex-start;
+  margin-top: 4px; 
+} */
+
+.cmp-coloumn__addressSection {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.cmp-coloumn__addressSection img {
+ width: 39px;
+    height: 47px;
+  flex-shrink: 0;
+  align-self: flex-start;
+}
+
+.specialist-search-form{
+  margin-right: 40px;
 }

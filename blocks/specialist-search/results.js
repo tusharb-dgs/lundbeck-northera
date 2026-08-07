@@ -44,11 +44,11 @@ export function renderResults(
    card.addEventListener(
         'click',
         () => {
-            cards.forEach((item) =>
-            item.classList.remove('active'),
-            );
+            // cards.forEach((item) =>
+            // // item.classList.remove('active'),
+            // );
 
-            card.classList.add('active');
+            // card.classList.add('active');
 
             const provider =
             providers.find(
