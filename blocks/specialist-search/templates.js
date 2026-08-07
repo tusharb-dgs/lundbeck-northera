@@ -64,7 +64,7 @@ export function createResultsSection() {
 
 export function renderProvider(provider) {
   return `
-    <div class="cmp-panel">
+    <div class="cmp-panel" data-provider-id="${provider.lundbeckID}">
       <div class="cmp-specialistsdetails">
         <div class="cmp-specialistsdetails__desktop">
           <div class="row">

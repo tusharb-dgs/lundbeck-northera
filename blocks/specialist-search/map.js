@@ -49,3 +49,55 @@ export async function getCoordsAsync(
 
   return null;
 }
+
+const markers = new Map();
+
+
+export function registerProviderMarkers(
+  providers,
+) {
+markers.forEach((marker) => {
+  marker.setMap(null);
+});
+
+markers.clear();
+  providers.forEach((provider) => {
+    const marker = new google.maps.Marker({
+      position: {
+        lat: Number(provider.latitude),
+        lng: Number(provider.longitude),
+      },
+      map,
+      title: `${provider.firstName} ${provider.lastName}`,
+    });
+
+    markers.set(
+      provider.lundbeckID,
+      marker,
+    );
+  });
+}
+export function focusProviderOnMap(
+  providerId,
+) {
+  const marker =
+    markers.get(providerId);
+
+  if (!marker) {
+    return;
+  }
+
+  map.panTo(
+    marker.getPosition(),
+  );
+
+  map.setZoom(15);
+
+  marker.setAnimation(
+    google.maps.Animation.BOUNCE,
+  );
+
+  setTimeout(() => {
+    marker.setAnimation(null);
+  }, 1500);
+}

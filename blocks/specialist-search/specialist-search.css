@@ -167,3 +167,17 @@ main .section.find-specialist > div > p:last-child:not(:has(picture)) {
   }
  
 }
+
+.cmp-panel {
+  cursor: pointer;
+  transition: all .2s ease;
+}
+
+.cmp-panel:hover {
+  background: #f8fbfc;
+}
+
+.cmp-panel.active {
+  background: #eef9fc;
+  border-left: 4px solid #00b5e2;
+}
