@@ -2,7 +2,7 @@ import { createSearchForm, validate } from './form.js';
 import { createResultsSection } from './templates.js';
 import { initializeMap, getCoordsAsync } from './map.js';
 import { getSpecialistData } from './api.js';
-import { renderResults, filterProviders } from './results.js';
+import { renderResults } from './results.js';
 
 export default async function decorate(block) {
   const config = getConfig(block);
@@ -108,13 +108,15 @@ function attachSearchHandler(
           coords,
         );
 
+        const DEFAULT_RADIUS = 10;
+
         const specialistData =
           await getSpecialistData(
             coords,
             config.apiEndpoint,
             zip,
+            DEFAULT_RADIUS,
           );
-
         const providers =
           typeof specialistData.MemberList === 'string'
             ? JSON.parse(
@@ -133,11 +135,12 @@ function attachSearchHandler(
           zip,
         );
 
-        attachRadiusHandler(
-          resultSection,
-          providers,
-          zip,
-        );
+      attachRadiusHandler(
+        resultSection,
+        coords,
+        zip,
+        config,
+      );
 
       } catch (err) {
         console.error(err);
@@ -151,46 +154,49 @@ function attachSearchHandler(
 
 function attachRadiusHandler(
   resultSection,
-  providers,
+  coords,
   zip,
+  config,
 ) {
   const radiusSelect =
     resultSection.querySelector(
       '#cmp-specialist__selectradius',
     );
 
-  const DEFAULT_RADIUS = 10;
-
-  let filteredProviders =
-    filterProviders(
-      providers,
-      DEFAULT_RADIUS,
-    );
-
-  renderResults(
-    resultSection,
-    filteredProviders,
-    zip,
-  );
-
   radiusSelect.addEventListener(
     'change',
-    (e) => {
-      const radius = Number(
-        e.target.value,
-      );
-
-      const filteredProviders =
-        filterProviders(
-          providers,
-          radius,
+    async (e) => {
+      try {
+        const radius = Number(
+          e.target.value,
         );
 
-      renderResults(
-        resultSection,
-        filteredProviders,
-        zip,
-      );
+        const specialistData =
+          await getSpecialistData(
+            coords,
+            config.apiEndpoint,
+            zip,
+            radius,
+          );
+
+        const providers =
+          typeof specialistData.MemberList === 'string'
+            ? JSON.parse(
+                specialistData.MemberList,
+              )
+            : specialistData.MemberList;
+
+        renderResults(
+          resultSection,
+          providers,
+          zip,
+        );
+      } catch (error) {
+        console.error(
+          'Radius change failed:',
+          error,
+        );
+      }
     },
   );
 }

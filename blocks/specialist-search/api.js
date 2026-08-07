@@ -2,36 +2,19 @@ export async function getSpecialistData(
   coords,
   apiEndpoint,
   zipCode,
+  miles = 10,
 ) {
   const formData = new FormData();
 
-  formData.append(
-    'zipLat',
-    coords.lat,
-  );
+  formData.append('zipLat', coords.lat);
+  formData.append('zipLong', coords.lng);
+  formData.append('zipCode', zipCode);
+  formData.append('miles', miles);
 
-  formData.append(
-    'zipLong',
-    coords.lng,
-  );
-
-  formData.append(
-    'zipCode',
-    zipCode,
-  );
-
-  formData.append(
-    'miles',
-    '50',
-  );
-
-  const response = await fetch(
-    apiEndpoint,
-    {
-      method: 'POST',
-      body: formData,
-    },
-  );
+  const response = await fetch(apiEndpoint, {
+    method: 'POST',
+    body: formData,
+  });
 
   if (!response.ok) {
     throw new Error(

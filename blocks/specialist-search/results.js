@@ -20,12 +20,12 @@ export function renderResults(
     .join('');
 }
 
-export function filterProviders(
-  providers,
-  radius,
-) {
-  return providers.filter(
-    (provider) =>
-      Number(provider.distance) <= radius,
-  );
-}
+// export function filterProviders(
+//   providers,
+//   radius,
+// ) {
+//   return providers.filter(
+//     (provider) =>
+//       Number(provider.distance) <= radius,
+//   );
+// }
