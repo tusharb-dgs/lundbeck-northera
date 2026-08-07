@@ -1,112 +1,289 @@
 export function createResultsSection() {
   const section = document.createElement('div');
-
-  section.className = 'cmp-specialist__result-section';
+  section.classList.add(
+    'cmp-specialist__result-section',
+  );
   section.style.display = 'none';
 
-  section.innerHTML = `
-     <section class="cmp-result__googlemap">
-      <div id="cmp-googlemap__placeholder" class="cmp-googlemap__maparea" >
+  // Map Section
+  const mapSection =
+    document.createElement('section');
+  mapSection.classList.add(
+    'cmp-result__googlemap',
+  );
 
-        <div  class="cmp-googlemap__placeholder">
-          <strong>Google Maps Placeholder</strong>
-          <p>
-            Lat:
-            <span class="map-lat"></span>
-          </p>
+  const mapArea =
+    document.createElement('div');
+  mapArea.id =
+    'cmp-googlemap__placeholder';
+  mapArea.classList.add(
+    'cmp-googlemap__maparea',
+  );
 
-          <p>
-            Lng:
-            <span class="map-lng"></span>
-          </p>
+  const mapPlaceholder =
+    document.createElement('div');
+  mapPlaceholder.classList.add(
+    'cmp-googlemap__placeholder',
+  );
 
-        </div>
+  const mapTitle =
+    document.createElement('strong');
+  mapTitle.textContent =
+    'Google Maps Placeholder';
 
-      </div>
-    </section>
+  const latPara =
+    document.createElement('p');
+  latPara.append('Lat: ');
 
-    <div class="cmp-specialist__result">
+  const latSpan =
+    document.createElement('span');
+  latSpan.classList.add('map-lat');
 
-      <p>Results for Your Area</p>
+  latPara.append(latSpan);
 
-      <div class="cmp-result__doctormiles">
+  const lngPara =
+    document.createElement('p');
+  lngPara.append('Lng: ');
 
-        <span class="cmp-result__length">
-        </span>
+  const lngSpan =
+    document.createElement('span');
+  lngSpan.classList.add('map-lng');
 
-        specialists within
+  lngPara.append(lngSpan);
 
-        <select id="cmp-specialist__selectradius">
+  mapPlaceholder.append(
+    mapTitle,
+    latPara,
+    lngPara,
+  );
 
-          <option selected>10</option>
-          <option>20</option>
-          <option>30</option>
+  mapArea.append(mapPlaceholder);
+  mapSection.append(mapArea);
 
-        </select>
+  // Result Header Section
+  const resultHeader =
+    document.createElement('div');
 
-        <span class="cmp-result__distance">
-          miles of
-          <span class="cmp-result__zipCode"></span>
-        </span>
+  resultHeader.classList.add(
+    'cmp-specialist__result',
+  );
 
-      </div>
+  const heading =
+    document.createElement('p');
 
-    </div>
+  heading.textContent =
+    'Results for Your Area';
 
-    <section class="cmp-result__list-section">
-      <div class="cmp-result__lists"></div>
-    </section>
+  const doctorMiles =
+    document.createElement('div');
 
-  `;
+  doctorMiles.classList.add(
+    'cmp-result__doctormiles',
+  );
+
+  const lengthSpan =
+    document.createElement('span');
+
+  lengthSpan.classList.add(
+    'cmp-result__length',
+  );
+
+  const radiusSelect =
+    document.createElement('select');
+
+  radiusSelect.id =
+    'cmp-specialist__selectradius';
+
+  [10, 20, 30].forEach((radius) => {
+    const option =
+      document.createElement('option');
+
+    option.value = radius;
+    option.textContent = radius;
+
+    if (radius === 10) {
+      option.selected = true;
+    }
+
+    radiusSelect.append(option);
+  });
+
+  const distanceSpan =
+    document.createElement('span');
+
+  distanceSpan.classList.add(
+    'cmp-result__distance',
+  );
+
+  distanceSpan.append('miles of ');
+
+  const zipCodeSpan =
+    document.createElement('span');
+
+  zipCodeSpan.classList.add(
+    'cmp-result__zipCode',
+  );
+
+  distanceSpan.append(zipCodeSpan);
+
+  doctorMiles.append(
+    lengthSpan,
+    document.createTextNode(
+      ' specialists within ',
+    ),
+    radiusSelect,
+    distanceSpan,
+  );
+
+  resultHeader.append(
+    heading,
+    doctorMiles,
+  );
+
+  // Results List Section
+  const listSection =
+    document.createElement('section');
+
+  listSection.classList.add(
+    'cmp-result__list-section',
+  );
+
+  const listContainer =
+    document.createElement('div');
+
+  listContainer.classList.add(
+    'cmp-result__lists',
+  );
+
+  listSection.append(listContainer);
+
+  // Append all sections
+  section.append(
+    mapSection,
+    resultHeader,
+    listSection,
+  );
 
   return section;
 }
 
 export function renderProvider(provider) {
-  return `
-    <div class="cmp-panel" data-provider-id="${provider.lundbeckID}">
-      <div class="cmp-specialistsdetails">
-        <div class="cmp-specialistsdetails__desktop">
-          <div class="row">
+  const panel = document.createElement('div');
+  panel.classList.add('cmp-panel');
+  panel.dataset.providerId = provider.lundbeckID;
 
-            <div class="cmp-specialistsdetails__coloumn cmp-coloumn__doctorname">
-              ${provider.firstName} ${provider.lastName}
-            </div>
+  const details = document.createElement('div');
+  details.classList.add('cmp-specialistsdetails');
 
-            <div class="cmp-specialistsdetails__coloumn cmp-coloumn__specialty">
-              ${provider.specialty}
-            </div>
+  const desktop = document.createElement('div');
+  desktop.classList.add(
+    'cmp-specialistsdetails__desktop',
+  );
 
-            <div class="cmp-specialistsdetails__coloumn cmp-coloumn__addressSection">
+  const row = document.createElement('div');
+  row.classList.add('row');
 
-              <div class="cmp-addressContainer">
-                <span class="cmp-coloumn__address">
-                  ${[
-                    provider.primaryAddress,
-                    provider.addtionalPrimaryAddress,
-                    provider.city,
-                    provider.state,
-                    provider.zipCode,
-                  ]
-                    .filter(Boolean)
-                    .join(', ')}
-                </span>
+  // Doctor Name
+  const doctorName =
+    document.createElement('div');
 
-                tel:${provider.phNumber}
-                  ${provider.phNumber}
-                </a>
+  doctorName.classList.add(
+    'cmp-specialistsdetails__coloumn',
+    'cmp-coloumn__doctorname',
+  );
 
-              </div>
+  doctorName.textContent =
+    `${provider.firstName} ${provider.lastName}`;
 
-            </div>
+  // Specialty
+  const specialty =
+    document.createElement('div');
 
-            <div class="cmp-specialistsdetails__coloumn cmp-coloumn__miles">
-              ${provider.distance} miles
-            </div>
+  specialty.classList.add(
+    'cmp-specialistsdetails__coloumn',
+    'cmp-coloumn__specialty',
+  );
 
-          </div>
-        </div>
-      </div>
-    </div>
-  `;
+  specialty.textContent =
+    provider.specialty;
+
+  // Address Section
+  const addressSection =
+    document.createElement('div');
+
+  addressSection.classList.add(
+    'cmp-specialistsdetails__coloumn',
+    'cmp-coloumn__addressSection',
+  );
+
+  const addressContainer =
+    document.createElement('div');
+
+  addressContainer.classList.add(
+    'cmp-addressContainer',
+  );
+
+  const address =
+    document.createElement('span');
+
+  address.classList.add(
+    'cmp-coloumn__address',
+  );
+
+  address.textContent = [
+    provider.primaryAddress,
+    provider.addtionalPrimaryAddress,
+    provider.city,
+    provider.state,
+    provider.zipCode,
+  ]
+    .filter(Boolean)
+    .join(', ');
+
+  const phoneLink =
+    document.createElement('a');
+
+  phoneLink.classList.add(
+    'cmp-coloumn__telNumber',
+  );
+
+  phoneLink.href =
+    `tel:${provider.phNumber}`;
+
+  phoneLink.textContent =
+    provider.phNumber;
+
+  addressContainer.append(
+    address,
+    phoneLink,
+  );
+
+  addressSection.append(
+    addressContainer,
+  );
+
+  // Distance
+  const miles =
+    document.createElement('div');
+
+  miles.classList.add(
+    'cmp-specialistsdetails__coloumn',
+    'cmp-coloumn__miles',
+  );
+
+  miles.textContent =
+    `${provider.distance} miles`;
+
+  row.append(
+    doctorName,
+    specialty,
+    addressSection,
+    miles,
+  );
+
+  desktop.append(row);
+  details.append(desktop);
+  panel.append(details);
+
+  return panel;
 }

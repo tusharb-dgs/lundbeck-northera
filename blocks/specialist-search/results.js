@@ -23,9 +23,13 @@ export function renderResults(
       '.cmp-result__lists',
     );
 
-  list.innerHTML = providers
-    .map(renderProvider)
-    .join('');
+    list.replaceChildren();
+
+    providers.forEach((provider) => {
+        list.append(
+            renderProvider(provider),
+        );
+    });
 
   registerProviderMarkers(
     providers,
