@@ -6,52 +6,33 @@ import { renderResults } from './results.js';
 
 export default async function decorate(block) {
   const config = getConfig(block);
-
   const form = createSearchForm(config);
-
-  const resultSection =
-    createResultsSection();
+  const resultSection = createResultsSection();
 
   block.innerHTML = '';
   block.append(form);
   block.append(resultSection);
 
-   initializeMap(
-    config.googleMapKey
-  );
-
-  attachSearchHandler(
-    form,
-    resultSection,
-    config,
-  );
+  initializeMap(config.googleMapKey);
+  attachSearchHandler(form, resultSection, config);
 }
 
 function getConfig(block) {
   const rows = [...block.children];
 
-  const googleMapKey =
-    rows[0]?.children[1]?.textContent.trim() || '';
+  const googleMapKey = rows[0]?.children[1]?.textContent.trim() || '';
 
-  const apiEndpoint =
-    rows[1]?.children[1]?.textContent.trim() || '';
+  const apiEndpoint = rows[1]?.children[1]?.textContent.trim() || '';
 
-  const helper =
-    rows[2]?.children[1]?.textContent.trim() || '';
+  const helper = rows[2]?.children[1]?.textContent.trim() || '';
 
-  const placeholder =
-    rows[3]?.children[1]?.textContent.trim() || '';
+  const placeholder = rows[3]?.children[1]?.textContent.trim() || '';
 
-  const termsRow =
-    rows[4]?.children[1];
+  const termsRow = rows[4]?.children[1];
 
-  const buttonLabel =
-    rows[5]?.children[1]?.textContent.trim()
-    || 'SEARCH NOW';
+  const buttonLabel = rows[5]?.children[1]?.textContent.trim() || 'SEARCH NOW';
 
-  const termsContent =
-    termsRow?.querySelector(':scope > div')
-    || termsRow;
+  const termsContent = termsRow?.querySelector(':scope > div') || termsRow;
 
   return {
     googleMapKey,
@@ -59,150 +40,69 @@ function getConfig(block) {
     helper,
     placeholder,
     buttonLabel,
-    termsContent:
-      termsContent?.innerHTML || '',
+    termsContent: termsContent?.innerHTML || ''
   };
 }
 
-function attachSearchHandler(
-  form,
-  resultSection,
-  config,
-) {
-  const zipInput =
-    form.querySelector('.specialist-search-zip');
+function attachSearchHandler(form, resultSection, config,) {
+  const zipInput = form.querySelector('.specialist-search-zip');
 
-  const checkbox =
-    form.querySelector('.specialist-search-checkbox');
+  const checkbox = form.querySelector('.specialist-search-checkbox');
 
-  const button =
-    form.querySelector('.specialist-search-submit');
+  const button = form.querySelector('.specialist-search-submit');
 
-  const errorBox =
-    form.querySelector('.specialist-search-error');
+  const errorBox = form.querySelector('.specialist-search-error');
 
-  button.addEventListener(
-    'click',
-    async () => {
-      const zip =
-        zipInput.value.trim();
+  button.addEventListener( 'click', async () => {
+    const zip = zipInput.value.trim();
+    const error = validate( zip, checkbox.checked );
 
-      const error = validate(
-        zip,
-        checkbox.checked,
-      );
+    if (error) {
+      errorBox.textContent = error;
+      return;
+    }
 
-      if (error) {
-        errorBox.textContent = error;
-        return;
-      }
+    errorBox.textContent = '';
 
-      errorBox.textContent = '';
+    try {
+      const coords = await getCoordsAsync(zip);
+      console.log( 'Received coordinates:'+ coords );
+      showLocationOnMap( coords.lat, coords.lng, 10 );
 
-      try {
-        const coords =
-          await getCoordsAsync(zip);
+      const DEFAULT_RADIUS = 10;
+      const specialistData = await getSpecialistData(coords,config.apiEndpoint,zip,DEFAULT_RADIUS);
+      const providers = typeof specialistData.MemberList === 'string'
+        ? JSON.parse( specialistData.MemberList )
+        : specialistData.MemberList;
 
-        console.log(
-          'Received coordinates:',
-          coords,
-        );
+      form.style.display = 'none';
+      resultSection.style.display = 'block';
 
-        showLocationOnMap(
-  coords.lat,
-  coords.lng,
-  10,
-);
+      renderResults( resultSection, providers, zip);
+      attachRadiusHandler( resultSection,coords,zip,config);
 
-        const DEFAULT_RADIUS = 10;
-
-        const specialistData =
-          await getSpecialistData(
-            coords,
-            config.apiEndpoint,
-            zip,
-            DEFAULT_RADIUS,
-          );
-        const providers =
-          typeof specialistData.MemberList === 'string'
-            ? JSON.parse(
-                specialistData.MemberList,
-              )
-            : specialistData.MemberList;
-
-        form.style.display = 'none';
-
-        resultSection.style.display =
-          'block';
-
-        renderResults(
-          resultSection,
-          providers,
-          zip,
-        );
-
-      attachRadiusHandler(
-        resultSection,
-        coords,
-        zip,
-        config,
-      );
-
-      } catch (err) {
-        console.error(err);
-
-        errorBox.textContent =
-          'Something went wrong. Please try again.';
-      }
-    },
+    } catch (err) {
+      console.error(err);
+      errorBox.textContent = 'Something went wrong. Please try again.';
+    }
+  },
   );
 }
 
-function attachRadiusHandler(
-  resultSection,
-  coords,
-  zip,
-  config,
-) {
-  const radiusSelect =
-    resultSection.querySelector(
-      '#cmp-specialist__selectradius',
-    );
+function attachRadiusHandler( resultSection,coords,zip,config) {
+  const radiusSelect = resultSection.querySelector( '#cmp-specialist__selectradius');
 
-  radiusSelect.addEventListener(
-    'change',
-    async (e) => {
-      try {
-        const radius = Number(
-          e.target.value,
-        );
+  radiusSelect.addEventListener( 'change', async (e) => {
+    try {
+      const radius = Number( e.target.value);
+      const specialistData = await getSpecialistData( coords,config.apiEndpoint,zip,radius);
+      const providers =typeof specialistData.MemberList === 'string'
+        ? JSON.parse(specialistData.MemberList)
+        : specialistData.MemberList;
 
-        const specialistData =
-          await getSpecialistData(
-            coords,
-            config.apiEndpoint,
-            zip,
-            radius,
-          );
-
-        const providers =
-          typeof specialistData.MemberList === 'string'
-            ? JSON.parse(
-                specialistData.MemberList,
-              )
-            : specialistData.MemberList;
-
-        renderResults(
-          resultSection,
-          providers,
-          zip,
-        );
-      } catch (error) {
-        console.error(
-          'Radius change failed:',
-          error,
-        );
-      }
-    },
-  );
+      renderResults( resultSection, providers, zip );
+    } catch (error) {
+      console.error( 'Radius change failed:', error);
+    }
+  });
 }

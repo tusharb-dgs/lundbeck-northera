@@ -1,102 +1,42 @@
-export function createSearchForm({
-  helper,
-  placeholder,
-  buttonLabel,
-  termsContent,
-}) {
+export function createSearchForm({helper, placeholder, buttonLabel, termsContent}) {
   const form = document.createElement('div');
-  form.classList.add(
-    'specialist-search-form',
-  );
+  form.classList.add('specialist-search-form');
 
-  const helperText =
-    document.createElement('p');
-
-  helperText.classList.add(
-    'specialist-search-helper',
-  );
-
+  const helperText = document.createElement('p');
+  helperText.classList.add('specialist-search-helper');
   helperText.textContent = helper;
 
-  const fieldContainer =
-    document.createElement('div');
+  const fieldContainer = document.createElement('div');
+  fieldContainer.classList.add('specialist-search-field');
 
-  fieldContainer.classList.add(
-    'specialist-search-field',
-  );
-
-  const zipInput =
-    document.createElement('input');
-
-  zipInput.classList.add(
-    'specialist-search-zip',
-  );
-
+  const zipInput = document.createElement('input');
+  zipInput.classList.add('specialist-search-zip');
   zipInput.type = 'text';
   zipInput.maxLength = 5;
   zipInput.placeholder = placeholder;
 
-  const termsLabel =
-    document.createElement('label');
+  const termsLabel = document.createElement('label');
+  termsLabel.classList.add('specialist-search-terms');
 
-  termsLabel.classList.add(
-    'specialist-search-terms',
-  );
-
-  const checkbox =
-    document.createElement('input');
-
+  const checkbox = document.createElement('input');
   checkbox.type = 'checkbox';
+  checkbox.classList.add('specialist-search-checkbox');
 
-  checkbox.classList.add(
-    'specialist-search-checkbox',
-  );
-
-  const termsText =
-    document.createElement('span');
-
-  termsText.classList.add(
-    'specialist-search-terms-text',
-  );
-
-  // preserves links + formatting
+  const termsText = document.createElement('span');
+  termsText.classList.add('specialist-search-terms-text');
   termsText.innerHTML = termsContent;
 
-  const submitButton =
-    document.createElement('button');
-
+  const submitButton = document.createElement('button');
   submitButton.type = 'button';
+  submitButton.classList.add('specialist-search-submit');
+  submitButton.textContent = buttonLabel;
 
-  submitButton.classList.add(
-    'specialist-search-submit',
-  );
+  const errorBox = document.createElement('div');
+  errorBox.classList.add('specialist-search-error');
 
-  submitButton.textContent =
-    buttonLabel;
-
-  const errorBox =
-    document.createElement('div');
-
-  errorBox.classList.add(
-    'specialist-search-error',
-  );
-
-  termsLabel.append(
-    checkbox,
-    termsText,
-  );
-
-  fieldContainer.append(
-    zipInput,
-    termsLabel,
-    submitButton,
-    errorBox,
-  );
-
-  form.append(
-    helperText,
-    fieldContainer,
-  );
+  termsLabel.append(checkbox, termsText);
+  fieldContainer.append( zipInput, termsLabel, submitButton, errorBox);
+  form.append(helperText, fieldContainer);
 
   return form;
 }
