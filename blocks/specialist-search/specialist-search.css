@@ -1,4 +1,4 @@
-@import url('./specialist-search-tokens.css');
+
 @import url('./specialist-search-results.css');
 /* ══════════════════════════════════════════════════════════════
    specialist-search — static visual replica of the source
@@ -19,8 +19,8 @@
   width: 100%;
   max-width: 100%;
   margin-inline: 0;
-  min-height: var(--specialist-search-banner-min-height);
-  /* background-image: var(--specialist-search-banner-image); */
+  min-height: 492px;
+  /* background-image: url("/icons/specialist-search-banner.png"); */
   background-color: transparent;
   background-size: cover;
   background-position: center;
@@ -46,9 +46,9 @@
 
 .specialist-search .specialist-search-helper {
   margin: 0;
-  font-family: var(--specialist-search-helper-font-family);
-  font-size: var(--specialist-search-helper-size);
-  color: var(--specialist-search-helper-color);
+  font-family: var(--body-font-family);
+  font-size: 16px;
+  color: var(--brand-grey);
 }
 
 .specialist-search .specialist-search-field {
@@ -62,18 +62,18 @@
 .specialist-search .specialist-search-zip {
   box-sizing: border-box;
   width: 100%;
-  height: var(--specialist-search-zip-height);
+  height: 46px;
   padding: 0 15px 0 50px;
   border: 1px solid var(--brand-grey);
   border-radius: 0;
   background-color: #fff;
-  background-image: var(--specialist-search-zip-icon);
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><g fill="none" stroke="%23969696" stroke-width="2"><circle cx="10" cy="10" r="7"/><line x1="15" y1="15" x2="22" y2="22" stroke-linecap="round"/></g></svg>');
   background-repeat: no-repeat;
   background-position: 15px center;
   background-size: 22px 22px;
-  font-family: var(--specialist-search-zip-font-family);
-  font-size: var(--specialist-search-zip-size);
-  color: var(--specialist-search-zip-color);
+  font-family: var(--body-font-family);
+  font-size: 18px;
+  color: #333;
 }
 
 .specialist-search .specialist-search-terms {
@@ -98,13 +98,13 @@
 .specialist-search .specialist-search-terms-text,
 .specialist-search .specialist-search-terms-text p {
   margin: 0;
-  font-family: var(--specialist-search-terms-font-family);
-  font-size: var(--specialist-search-terms-size);
-  color: var(--specialist-search-terms-color);
+  font-family: var(--body-font-family);
+  font-size: 16px;
+  color: var(--brand-grey);
 }
 
 .specialist-search .specialist-search-terms-text a {
-  color: var(--specialist-search-terms-link-color);
+  color: var(--brand-cyan);
   text-decoration: none;
 }
 
@@ -112,12 +112,12 @@
   align-self: flex-start;
   border: 0;
   border-radius: 0;
-  padding: var(--specialist-search-submit-padding);
-  background-color: var(--specialist-search-submit-background);
-  color: var(--specialist-search-submit-color);
-  font-family: var(--specialist-search-submit-font-family);
-  font-size: var(--specialist-search-submit-size);
-  box-shadow: var(--specialist-search-submit-shadow);
+  padding: 15px 10px;
+  background-color: var(--brand-cyan);
+  color: var(--brand-blue-dark);
+  font-family: var(--heading-heavy-font-family);
+  font-size: 18px;
+  box-shadow: var(--button-shadow);
   cursor: pointer;
   transition: box-shadow 0.2s ease-in-out, background-color 0.2s ease-in-out, color 0.2s ease-in-out;
 width: 100%;
@@ -125,14 +125,14 @@ width: 100%;
 
 .specialist-search .specialist-search-submit:hover,
 .specialist-search .specialist-search-submit:focus {
-  background-color: var(--specialist-search-submit-hover-background);
-  color: var(--specialist-search-submit-hover-color);
-  box-shadow: var(--specialist-search-submit-hover-shadow);
+  background-color: var(--brand-cyan-shadow);
+  color: #fff;
+  box-shadow: var(--button-hover-shadow);
 }
 
 
 main .section.find-specialist > div > p {
-  font-size: var(--specialist-search-helper-size);
+  font-size: 16px;
 }
 
 main .section.find-specialist > div > p:last-child:not(:has(picture)) {
