@@ -1,20 +1,10 @@
-
 @import url('./specialist-search-results.css');
+
 /* ══════════════════════════════════════════════════════════════
-   specialist-search — static visual replica of the source
-   Google-Maps ZIP lookup form (helper line + ZIP field + Terms
-   checkbox + SEARCH NOW button). The live map search is not
-   migrated; this reproduces the source chrome only.
-   Mobile-first; source breakpoints 768/992/1200.
+   specialist-search
+   Mobile First
    ══════════════════════════════════════════════════════════════ */
 
-/* source: the search section is a full-bleed banner image (cover) at least
-   492px tall; a white form card sits over it — flush-left on mobile,
-   floated right on desktop. The banner fills its content column edge-to-edge.
-   Its wrapper is excluded from the section gutter (see styles.css gutter
-   exclusion list), so `width: 100%` here spans the full content column at
-   every breakpoint — no forced 1200px / 100vw that would overflow the column
-   (which is narrowed by the ISI rail at >=1200px) and leave an empty side gap. */
 .specialist-search {
   width: 100%;
   max-width: 100%;
@@ -27,16 +17,16 @@
   background-repeat: no-repeat;
   display: flex;
   align-items: center;
-  justify-content: flex-start;
+  justify-content: center;
+  padding: 20px;
   box-sizing: border-box;
 }
 
-/* the white card holding the form (source: white bg, 30px padding, soft drop
-   shadow), flush against the banner's left edge on mobile */
 .specialist-search .specialist-search-form {
   display: flex;
   flex-direction: column;
   gap: 15px;
+  width: 100%;
   max-width: 385px;
   box-sizing: border-box;
   padding: 30px;
@@ -57,8 +47,6 @@
   gap: 15px;
 }
 
-/* source: ZIP input has a grey magnifying-glass icon on the left (90px left
-   padding reserving room for it) */
 .specialist-search .specialist-search-zip {
   box-sizing: border-box;
   width: 100%;
@@ -109,6 +97,7 @@
 }
 
 .specialist-search .specialist-search-submit {
+  width: 100%;
   align-self: flex-start;
   border: 0;
   border-radius: 0;
@@ -119,8 +108,10 @@
   font-size: 18px;
   box-shadow: var(--button-shadow);
   cursor: pointer;
-  transition: box-shadow 0.2s ease-in-out, background-color 0.2s ease-in-out, color 0.2s ease-in-out;
-width: 100%;
+  transition:
+    box-shadow 0.2s ease-in-out,
+    background-color 0.2s ease-in-out,
+    color 0.2s ease-in-out;
 }
 
 .specialist-search .specialist-search-submit:hover,
@@ -130,51 +121,22 @@ width: 100%;
   box-shadow: var(--button-hover-shadow);
 }
 
-
 main .section.find-specialist > div > p {
   font-size: 16px;
 }
 
 main .section.find-specialist > div > p:last-child:not(:has(picture)) {
   margin: 0;
-  padding:50px 0;
+  padding: 50px 0;
 }
 
-/* desktop: source floats the white form card to the right side of the banner
-   (source: 385px card, ~140px right gap) */
-@media (width >= 768px) {
-  .specialist-search {
-    justify-content: flex-end;
-    /* padding-right: 40px; */
-  }
-
-  .specialist-search .specialist-search-form {
-    width: 385px;
-  }
-
-  main .section.find-specialist > div > p {
-   font-size: var(--body-font-size-m);
-  }
-
-  .specialist-search .specialist-search-helper {
-    font-size: var(--body-font-size-m);
-    line-height: 22px;
-  }
-
-  specialist-search .specialist-search-terms-text, .specialist-search .specialist-search-terms-text p {
-    font-size: var(--body-font-size-m);
-    line-height: 30px;
-  }
- 
-}
+/* --------------------------------------------------
+   Result Panel
+-------------------------------------------------- */
 
 .cmp-panel {
   cursor: pointer;
-  transition: all .2s ease;
-}
-
-.cmp-panel:hover {
-  /* background: #f8fbfc; */
+  transition: all 0.2s ease;
 }
 
 .cmp-panel.active {
@@ -182,32 +144,17 @@ main .section.find-specialist > div > p:last-child:not(:has(picture)) {
   border-left: 4px solid #00b5e2;
 }
 
-/* .cmp-specialistsdetails__coloumn::before
-{content:'\e062';
-    position: absolute;
-    font-size: 45px;
-    color: #02bded;
-  } */
+/* --------------------------------------------------
+   Specialist Details
+-------------------------------------------------- */
 
-  .cmp-specialistsdetails__coloumn{
-    display: flex;
-  }
-
-  .cmp-specialistsdetails__coloumn  img {
-  /* transform: scale(0.4); */
-  transform-origin: center; /* Keeps the image centered while shrinking */
+.cmp-specialistsdetails__coloumn {
+  display: flex;
 }
 
-
-/* Target only the first child inside the flex container */
-/* .cmp-specialistsdetails__coloumn > :img {
-  align-self: flex-start;
-} */
-
-/* .cmp-specialistsdetails__coloumn.cmp-coloumn__addressSection > img {
-  align-self: flex-start;
-  margin-top: 4px; 
-} */
+.cmp-specialistsdetails__coloumn img {
+  transform-origin: center;
+}
 
 .cmp-coloumn__addressSection {
   display: flex;
@@ -216,12 +163,46 @@ main .section.find-specialist > div > p:last-child:not(:has(picture)) {
 }
 
 .cmp-coloumn__addressSection img {
- width: 39px;
-    height: 47px;
+  width: 39px;
+  height: 47px;
   flex-shrink: 0;
   align-self: flex-start;
 }
 
-.specialist-search-form{
-  margin-right: 40px;
+.specialist-search-form {
+  margin-right: 0;
+}
+
+/* ══════════════════════════════════════════════════════════════
+   Tablet / Desktop (768px+)
+   ══════════════════════════════════════════════════════════════ */
+
+@media (min-width: 768px) {
+  .specialist-search {
+    justify-content: flex-end;
+    padding: 0;
+  }
+
+  .specialist-search .specialist-search-form {
+    width: 385px;
+  }
+
+  .specialist-search-form {
+    margin-right: 40px;
+  }
+
+  main .section.find-specialist > div > p {
+    font-size: var(--body-font-size-m);
+  }
+
+  .specialist-search .specialist-search-helper {
+    font-size: var(--body-font-size-m);
+    line-height: 22px;
+  }
+
+  .specialist-search .specialist-search-terms-text,
+  .specialist-search .specialist-search-terms-text p {
+    font-size: var(--body-font-size-m);
+    line-height: 30px;
+  }
 }

@@ -1,5 +1,5 @@
 /* --------------------------------------------------
-   Search Banner
+   Search Banner (Mobile First)
 -------------------------------------------------- */
 
 .specialist-search {
@@ -13,7 +13,8 @@
   background-repeat: no-repeat;
   display: flex;
   align-items: center;
-  justify-content: flex-start;
+  justify-content: center;
+  padding: 20px;
   box-sizing: border-box;
 }
 
@@ -21,7 +22,7 @@
   display: flex;
   flex-direction: column;
   gap: 15px;
-  max-width: 385px;
+  width: 100%;
   padding: 30px;
   background: #fff;
   box-shadow: 0 3px 3px 4px rgb(0 0 0 / 20%);
@@ -96,7 +97,7 @@
   font-size: var(--specialist-search-submit-size);
   box-shadow: var(--button-shadow);
   cursor: pointer;
-  transition: all .2s ease;
+  transition: all 0.2s ease;
 }
 
 .specialist-search .specialist-search-submit:hover {
@@ -129,12 +130,8 @@
   height: 520px;
 }
 
-.cmp-googlemap__maparea{
-  height: 520px;
-}
-
 .cmp-googlemap__maparea {
-  /* height: 340px; */
+  height: 240px;
   background: #e2e2e2;
   position: relative;
 }
@@ -148,12 +145,11 @@
   height: 100%;
   color: #666;
   text-align: center;
-  background:
-    linear-gradient(
-      45deg,
-      #ececec,
-      #dcdcdc
-    );
+  background: linear-gradient(
+    45deg,
+    #ececec,
+    #dcdcdc
+  );
 }
 
 .cmp-googlemap__placeholder strong {
@@ -165,12 +161,12 @@
 -------------------------------------------------- */
 
 .cmp-specialist__result {
-  padding: 40px;
+  padding: 25px 20px;
 }
 
 .cmp-specialist__result > p {
   margin: 0 0 16px;
-  font-size: 48px;
+  font-size: 34px;
   line-height: 1.1;
   color: #18486a;
   font-family: var(--heading-heavy-font-family);
@@ -203,7 +199,7 @@
 -------------------------------------------------- */
 
 .cmp-result__lists {
-  padding: 0 40px 50px;
+  padding: 0 20px 30px;
 }
 
 .cmp-panel {
@@ -213,12 +209,8 @@
 
 .cmp-specialistsdetails .row {
   display: grid;
-  grid-template-columns:
-    1.2fr
-    1.2fr
-    2fr
-    120px;
-  gap: 25px;
+  grid-template-columns: 1fr;
+  gap: 14px;
   align-items: start;
 }
 
@@ -258,9 +250,10 @@
 }
 
 .cmp-coloumn__miles {
+  justify-self: end;
+  text-align: left;
   font-size: 18px;
   font-weight: 700;
-  text-align: right;
   color: #333;
 }
 
@@ -273,62 +266,47 @@
 }
 
 /* --------------------------------------------------
-   Tablet
+   Tablet & Desktop
 -------------------------------------------------- */
 
-@media (width >= 768px) {
+@media (min-width: 768px) {
   .specialist-search {
     justify-content: flex-end;
-    padding-right: 0px;
+    padding: 0;
+    padding-right: 0;
   }
 
   .specialist-search .specialist-search-form {
     width: 385px;
-  }
-}
-
-/* --------------------------------------------------
-   Mobile
--------------------------------------------------- */
-
-@media (width <= 767px) {
-  .specialist-search {
-    padding: 20px;
-    justify-content: center;
-  }
-
-  .specialist-search .specialist-search-form {
-    width: 100%;
+    max-width: 385px;
   }
 
   .cmp-specialist__result {
-    padding: 25px 20px;
+    padding: 40px;
   }
 
   .cmp-specialist__result > p {
-    font-size: 34px;
+    font-size: 48px;
   }
 
   .cmp-result__lists {
-    padding: 0 20px 30px;
+    padding: 0 40px 50px;
   }
 
   .cmp-specialistsdetails .row {
-    grid-template-columns: 1fr;
-    gap: 14px;
+    grid-template-columns:
+      1.2fr
+      1.2fr
+      2fr
+      120px;
+    gap: 25px;
   }
 
   .cmp-coloumn__miles {
-    text-align: left;
+    text-align: right;
   }
 
   .cmp-googlemap__maparea {
-    height: 240px;
+    height: 520px;
   }
-}
-
-.cmp-coloumn__miles{
-    justify-self: end;
-  text-align: right;
-  font-weight: 700;
 }
