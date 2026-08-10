@@ -20,7 +20,7 @@
   max-width: 100%;
   margin-inline: 0;
   min-height: var(--specialist-search-banner-min-height);
-  background-image: var(--specialist-search-banner-image);
+  /* background-image: var(--specialist-search-banner-image); */
   background-color: transparent;
   background-size: cover;
   background-position: center;

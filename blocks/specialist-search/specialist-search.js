@@ -12,9 +12,11 @@ export default async function decorate(block) {
   block.innerHTML = '';
   block.append(form);
   block.append(resultSection);
+  block.style.backgroundImage = `url('${config.backgroundImage}')`;
 
   initializeMap(config.googleMapKey);
   attachSearchHandler(form, resultSection, config);
+
 }
 
 function getConfig(block) {
@@ -34,12 +36,17 @@ function getConfig(block) {
 
   const termsContent = termsRow?.querySelector(':scope > div') || termsRow;
 
+  const imgEl = rows[6]?.children[1]?.querySelector('picture img');
+
+  const backgroundImage = imgEl?.currentSrc || imgEl?.src || '';
+
   return {
     googleMapKey,
     apiEndpoint,
     helper,
     placeholder,
     buttonLabel,
+    backgroundImage,
     termsContent: termsContent?.innerHTML || ''
   };
 }
@@ -85,8 +92,8 @@ function attachSearchHandler(form, resultSection, config,) {
       console.error(err);
       errorBox.textContent = 'Something went wrong. Please try again.';
     }
-  },
-  );
+  });
+
 }
 
 function attachRadiusHandler( resultSection,coords,zip,config) {
