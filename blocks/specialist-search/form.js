@@ -1,55 +1,79 @@
-export function createSearchForm({helper, placeholder, buttonLabel, termsContent}) {
-  const form = document.createElement('div');
-  form.classList.add('specialist-search-form');
+import { initFormValidation } from "../../scripts/form-validator.js";
+import { initializeMap, getCoordsAsync, showLocationOnMap } from './map.js';
+import { getSpecialistData } from './api.js';
+import { renderResults, attachRadiusHandler } from './results.js';
+import {config, resultSection } from './specialist-search.js';
 
-  const helperText = document.createElement('p');
-  helperText.classList.add('specialist-search-helper');
-  helperText.textContent = helper;
+export async function initValidationListeners(form) {
 
-  const fieldContainer = document.createElement('div');
-  fieldContainer.classList.add('specialist-search-field');
+  const validator = await initFormValidation(".specialist-search form", {
+    error: {
+      element: "div",
+      className: "form-error"
+    },
+    rules: {
+      zipCode: {
+          required: {
+            value: true,
+            message: "Zip code is required."
+          },
+          maxLength: {
+            value: 5,
+            message: "Zip code must be 5 characters long."
+          }
+      },
 
-  const zipInput = document.createElement('input');
-  zipInput.classList.add('specialist-search-zip');
-  zipInput.type = 'text';
-  zipInput.maxLength = 5;
-  zipInput.placeholder = placeholder;
+      terms: {
+        required: {
+          value: true,
+          message: "Please accept Terms & Conditions."
+        }
+      }
+    }
 
-  const termsLabel = document.createElement('label');
-  termsLabel.classList.add('specialist-search-terms');
+  });
 
-  const checkbox = document.createElement('input');
-  checkbox.type = 'checkbox';
-  checkbox.classList.add('specialist-search-checkbox');
+  const button = form.querySelector('.specialist-search #form-submitbtn');
+  button.addEventListener('click',
+    (event) => {
+      event.preventDefault();
+      if (validator.validateForm()) {     
+        console.log(" Validated");
+        submitForm(form);
+      } else {
+        console.log("Not Validated");  
+      }
+    }
+  );
 
-  const termsText = document.createElement('span');
-  termsText.classList.add('specialist-search-terms-text');
-  termsText.innerHTML = termsContent;
-
-  const submitButton = document.createElement('button');
-  submitButton.type = 'button';
-  submitButton.classList.add('specialist-search-submit');
-  submitButton.textContent = buttonLabel;
-
-  const errorBox = document.createElement('div');
-  errorBox.classList.add('specialist-search-error');
-
-  termsLabel.append(checkbox, termsText);
-  fieldContainer.append( zipInput, termsLabel, submitButton, errorBox);
-  form.append(helperText, fieldContainer);
-
-  return form;
 }
 
+export async function submitForm(form) {
+  const zipInput = form.querySelector('.specialist-search-zip input');
+  const checkbox = form.querySelector('.specialist-search-checkbox input');
+  const zip = zipInput.value.trim();
+  console.log("Zip code: ", zip);
+  var num = parseInt(zip, 10);
 
-export function validate(zip, checked) {
-  if (!/^\d{5}$/.test(zip)) {
-    return 'Please enter a valid ZIP code.';
-  }
+    try {
+      const coords = await getCoordsAsync(zip);
+      console.log( 'Received coordinates:'+ JSON.stringify(coords) );
+      showLocationOnMap( coords.lat, coords.lng, 10 );
 
-  if (!checked) {
-    return 'Please accept Terms & Conditions.';
-  }
+      const DEFAULT_RADIUS = 10;
+      const specialistData = await getSpecialistData(coords,config.apiEndpoint,zip,DEFAULT_RADIUS);
+      const providers = typeof specialistData.MemberList === 'string'
+        ? JSON.parse( specialistData.MemberList )
+        : specialistData.MemberList;
 
-  return null;
+      form.style.display = 'none';
+      resultSection.style.display = 'block';
+
+      renderResults( resultSection, providers, zip);
+      attachRadiusHandler( resultSection,coords,zip,config);
+
+    } catch (err) {
+      console.error(err);
+    }
+
 }

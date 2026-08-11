@@ -1,115 +1,50 @@
-import { createSearchForm, validate } from './form.js';
+import { initValidationListeners, submitForm } from './form.js';
 import { createResultsSection } from './templates.js';
 import { initializeMap, getCoordsAsync, showLocationOnMap } from './map.js';
 import { getSpecialistData } from './api.js';
 import { renderResults } from './results.js';
 
-export default async function decorate(block) {
-  const config = getConfig(block);
-  const form = createSearchForm(config);
-  const resultSection = createResultsSection();
+export let config = {};
+export let resultSection;
 
-  block.innerHTML = '';
-  block.append(form);
+export default async function decorate(block) {
+
+  try {
+    const module = await import("../form/form.js");
+    if (typeof module.default === 'function') {
+      await module.default(block);
+    }
+  } catch (error) {
+    console.error('Failed to load form block:',error);
+  }
+
+  config = getConfig(block);
+  console.log('Config:', config);
+
+  const form = document.querySelector('.specialist-search form');
+  form.noValidate = true;
+
+  resultSection = createResultsSection();
   block.append(resultSection);
   block.style.backgroundImage = `url('${config.backgroundImage}')`;
 
   initializeMap(config.googleMapKey);
-  attachSearchHandler(form, resultSection, config);
-
+  initValidationListeners(form);
 }
 
 function getConfig(block) {
-  const rows = [...block.children];
+  const apiEndpoint = document.querySelector('div.specialist-search.block form').getAttribute('data-action');
 
-  const googleMapKey = rows[0]?.children[1]?.textContent.trim() || '';
+  const googleMapKey = document.querySelector('#form-gmapikey').textContent;
 
-  const apiEndpoint = rows[1]?.children[1]?.textContent.trim() || '';
+  const backgroundImage = document.querySelector('#form-bgimageurl').textContent;
 
-  const helper = rows[2]?.children[1]?.textContent.trim() || '';
-
-  const placeholder = rows[3]?.children[1]?.textContent.trim() || '';
-
-  const termsRow = rows[4]?.children[1];
-
-  const buttonLabel = rows[5]?.children[1]?.textContent.trim() || 'SEARCH NOW';
-
-  const termsContent = termsRow?.querySelector(':scope > div') || termsRow;
-
-  const imgEl = rows[6]?.children[1]?.querySelector('picture img');
-
-  const backgroundImage = imgEl?.currentSrc || imgEl?.src || '';
+  document.querySelectorAll( '#form-gmapikey, #form-bgimageurl').forEach(e => e.remove());
+  document.getElementById('form-zipcode-label').style.display = 'none';
 
   return {
     googleMapKey,
     apiEndpoint,
-    helper,
-    placeholder,
-    buttonLabel,
-    backgroundImage,
-    termsContent: termsContent?.innerHTML || ''
+    backgroundImage
   };
-}
-
-function attachSearchHandler(form, resultSection, config,) {
-  const zipInput = form.querySelector('.specialist-search-zip');
-
-  const checkbox = form.querySelector('.specialist-search-checkbox');
-
-  const button = form.querySelector('.specialist-search-submit');
-
-  const errorBox = form.querySelector('.specialist-search-error');
-
-  button.addEventListener( 'click', async () => {
-    const zip = zipInput.value.trim();
-    const error = validate( zip, checkbox.checked );
-
-    if (error) {
-      errorBox.textContent = error;
-      return;
-    }
-
-    errorBox.textContent = '';
-
-    try {
-      const coords = await getCoordsAsync(zip);
-      console.log( 'Received coordinates:'+ coords );
-      showLocationOnMap( coords.lat, coords.lng, 10 );
-
-      const DEFAULT_RADIUS = 10;
-      const specialistData = await getSpecialistData(coords,config.apiEndpoint,zip,DEFAULT_RADIUS);
-      const providers = typeof specialistData.MemberList === 'string'
-        ? JSON.parse( specialistData.MemberList )
-        : specialistData.MemberList;
-
-      form.style.display = 'none';
-      resultSection.style.display = 'block';
-
-      renderResults( resultSection, providers, zip);
-      attachRadiusHandler( resultSection,coords,zip,config);
-
-    } catch (err) {
-      console.error(err);
-      errorBox.textContent = 'Something went wrong. Please try again.';
-    }
-  });
-
-}
-
-function attachRadiusHandler( resultSection,coords,zip,config) {
-  const radiusSelect = resultSection.querySelector( '#cmp-specialist__selectradius');
-
-  radiusSelect.addEventListener( 'change', async (e) => {
-    try {
-      const radius = Number( e.target.value);
-      const specialistData = await getSpecialistData( coords,config.apiEndpoint,zip,radius);
-      const providers =typeof specialistData.MemberList === 'string'
-        ? JSON.parse(specialistData.MemberList)
-        : specialistData.MemberList;
-
-      renderResults( resultSection, providers, zip );
-    } catch (error) {
-      console.error( 'Radius change failed:', error);
-    }
-  });
 }
