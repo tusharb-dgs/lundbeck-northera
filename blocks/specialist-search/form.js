@@ -19,14 +19,14 @@ export async function initValidationListeners(form) {
           },
           maxLength: {
             value: 5,
-            message: "Zip code must be 5 characters long."
+            message: "This is an invalid zip code."
           }
       },
 
       terms: {
         required: {
           value: true,
-          message: "Please accept Terms & Conditions."
+          message: "Terms and Conditions is a required field."
         }
       }
     }
@@ -43,6 +43,7 @@ export async function initValidationListeners(form) {
       } else {
         console.log("Not Validated");  
       }
+      form.parentElement.style.backgroundImage = 'none';
     }
   );
 

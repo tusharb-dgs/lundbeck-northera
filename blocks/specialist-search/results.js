@@ -1,5 +1,6 @@
 import { renderProvider } from './templates.js';
 import { registerProviderMarkers, focusProviderOnMap, showLocationOnMap } from './map.js';
+import { getSpecialistData } from './api.js';
 
 export function renderResults(resultSection, providers, zip) {
   resultSection.querySelector('.cmp-result__length').textContent = providers.length;

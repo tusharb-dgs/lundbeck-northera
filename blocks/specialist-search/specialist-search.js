@@ -29,6 +29,7 @@ export default async function decorate(block) {
   block.style.backgroundImage = `url('${config.backgroundImage}')`;
 
   initializeMap(config.googleMapKey);
+  fixMarkdownText();
   initValidationListeners(form);
 }
 
@@ -47,4 +48,37 @@ function getConfig(block) {
     apiEndpoint,
     backgroundImage
   };
+}
+
+function fixMarkdownText() {
+  //Fix Markdown Links
+  document.querySelectorAll('form label').forEach(el => {
+    const regex = /\[([^\]]+)\]\((https?:\/\/[^\s)]+)\)/g;
+    if (regex.test(el.innerHTML)) {
+      el.innerHTML = el.innerHTML.replace(regex, '<a href="$2" target="_blank" rel="noopener">$1</a>');
+    }
+  });
+
+  //Fix Markdown Label
+  document.querySelectorAll('.field-wrapper label').forEach((label) => {
+    if (label.dataset.labelEnhanced === 'true') {
+      return;
+    }
+
+    if (!label.textContent.includes('|')) {
+      return;
+    }
+
+    label.dataset.labelEnhanced = 'true';
+    const [labelText, helperText] = label.textContent.split('|');
+    label.innerHTML = `<span class="ugc-label-text"> ${labelText}  </span><span class="ugc-label-helper"> &nbsp;${helperText} </span>`;
+  });
+
+  //Fix Bold Text
+  document.querySelectorAll('.plaintext-wrapper p').forEach((el) => {
+    el.innerHTML = el.innerHTML.replace(
+      /\*\*(.*?)\*\*/g,
+      '<strong>$1</strong>',
+    );
+  });  
 }
