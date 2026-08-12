@@ -43,7 +43,6 @@ export async function initValidationListeners(form) {
       } else {
         console.log("Not Validated");  
       }
-      form.parentElement.style.backgroundImage = 'none';
     }
   );
 
@@ -76,5 +75,7 @@ export async function submitForm(form) {
     } catch (err) {
       console.error(err);
     }
+  
+    form.parentElement.style.backgroundImage = 'none';
 
 }
