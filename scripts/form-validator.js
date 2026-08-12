@@ -120,6 +120,18 @@ function validateRule(ruleName, ruleValue, field, value, ruleConfig) {
                 valid: value.length <= ruleValue,
                 message: `Error: Write your story is too long: ${value.length}/${ruleValue}`
             };
+        
+        case "minLength":
+            return {
+                valid: value.length >= ruleValue,
+                message: `Error: Write your story is too short: ${value.length}/${ruleValue}`
+            };    
+
+        case "exactLength":
+            return {
+                valid: value.length = ruleValue,
+                message: `Error: Exact ${ruleValue} number of Characters Required`
+            };    
 
         case "minFiles": {
             const files = getFiles(ruleConfig.selector);

@@ -13,16 +13,15 @@ export async function initValidationListeners(form) {
     },
     rules: {
       zipCode: {
-          required: {
-            value: true,
-            message: "Zip code is required."
-          },
           maxLength: {
+            value: 5,
+            message: "This is an invalid zip code."
+          },
+          minLength: {
             value: 5,
             message: "This is an invalid zip code."
           }
       },
-
       terms: {
         required: {
           value: true,
@@ -37,12 +36,16 @@ export async function initValidationListeners(form) {
   button.addEventListener('click',
     (event) => {
       event.preventDefault();
+      
       if (validator.validateForm()) {     
         console.log(" Validated");
         submitForm(form);
       } else {
         console.log("Not Validated");  
       }
+
+      const btn = document.querySelector('#form-submitbtn');
+      if (btn) document.querySelectorAll('.form-error').forEach(err => btn.before(err));
     }
   );
 

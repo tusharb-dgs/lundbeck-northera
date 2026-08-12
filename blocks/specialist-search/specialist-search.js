@@ -81,4 +81,16 @@ function fixMarkdownText() {
       '<strong>$1</strong>',
     );
   });  
+
+  document.querySelector('.specialist-search form').addEventListener('click',
+    (event) => {
+      const btn = document.querySelector('#form-submitbtn');
+      if (btn) document.querySelectorAll('.form-error').forEach(err => btn.before(err));
+    }
+  );
+
+  document.querySelector('#form-zipcode').maxLength = 5;
+  // inputElement.maxLength = 10;
+
+  
 }

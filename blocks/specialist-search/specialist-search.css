@@ -1,218 +1,483 @@
-@import url('./specialist-search-results.css');
-
-/* ══════════════════════════════════════════════════════════════
-   specialist-search
-   Mobile First
-   ══════════════════════════════════════════════════════════════ */
+/* MAIN CONTAINER */
 
 .specialist-search {
+ margin-top: 30px;
+}
+
+.specialist-search.block {
+  width: 100%;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  position: relative;
+}
+
+.specialist-search.block {
+  min-height: 300px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+}
+
+/* SEARCH CARD */
+
+.specialist-search.block form {
   width: 100%;
   max-width: 100%;
-  margin-inline: 0;
-  
-  /* FIX FOR MOBILE OVERLAP: Changing container from centered flex height 
-     to a natural block vertical stack flow for smaller screen boundaries. */
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: flex-start;
-  padding: 0; /* Remove blanket padding so background elements sit flush */
-  box-sizing: border-box;
-  background-color: transparent;
+  background: #fff;
+  padding: 16px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, .2);
+  margin-top: 180px;
+  padding-top:30px;
 }
 
-.specialist-search .specialist-search-form {
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
-  width: 100%;
-  max-width: 100%; /* Spans full horizontal container room dynamically on small mobile screen viewports */
-  box-sizing: border-box;
-  padding: 30px 20px;
-  background-color: #fff;
-  
-  /* FIX FOR MAP LAYER POSITIONING: 
-     Removes elevation shadows on mobile screens so it sits naturally flush against the section boundaries. */
-  box-shadow: none; 
-  border-bottom: 1px solid #e2e8f0;
-  margin-top: 150px;
-}
-
-.specialist-search .specialist-search-helper {
-  margin: 0;
-  font-family: var(--body-font-family);
+.specialist-search-helper p {
+  margin: 0 0;
   font-size: 16px;
-  color: var(--brand-grey);
+  line-height: 1.4;
+  font-family: 'Gotham-Medium';
+  color: #58595b;
 }
 
-.specialist-search .specialist-search-field {
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
+/* ZIP CODE FIELD */
+.specialist-search-zip {
+  margin-bottom: 20px;
 }
 
-.specialist-search .specialist-search-zip {
-  box-sizing: border-box;
+.specialist-search-zip {
+  position: relative;
+  display: inline-block;
   width: 100%;
-  height: 46px;
-  padding: 0 15px 0 50px;
-  border: 1px solid var(--brand-grey);
-  border-radius: 0;
-  background-color: #fff;
-  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><g fill="none" stroke="%23969696" stroke-width="2"><circle cx="10" cy="10" r="7"/><line x1="15" y1="15" x2="22" y2="22" stroke-linecap="round"/></g></svg>');
-  background-repeat: no-repeat;
-  background-position: 15px center;
-  background-size: 22px 22px;
-  font-family: var(--body-font-family);
+}
+
+#form-zipcode {
+  width: 100%;
   font-size: 18px;
+  font-family: "Gotham-Medium";
+  box-sizing: border-box;
+  padding-left: 38px;
+  text-align: center;
+}
+
+.specialist-search-zip::before {
+  content: "";
+  position: absolute;
+  left: 12px;
+  top: 75%;
+  transform: translateY(-50%);
+  width: 18px;
+  height: 18px;
+  pointer-events: none;
+  -webkit-mask: url('/icons/search.svg') no-repeat center / contain;
+  mask: url('/icons/search.svg') no-repeat center / contain;  
+  background-color: gray; 
+  margin-left: 50px;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: Arial, Helvetica, sans-serif;
+  background: #f3f3f3;
   color: #333;
 }
 
-.specialist-search .specialist-search-terms {
+img {
+  max-width: 100%;
+  display: block;
+}
+
+.specialist-search-zip input {
+  width: 100%;
+  height: 48px;
+  border: none;
+  background: #ececec;
+  padding: 0 15px;
+  font-size: 16px;
+  color: #000;
+  margin-top: 38px;
+}
+
+.specialist-search-zip input:focus {
+  outline: none;
+}
+
+.specialist-search-zip input::placeholder {
+  font-weight: bold;
+      color: #969696;
+      font-family:'Gotham-bold';
+
+}
+
+/* CHECKBOX */
+
+.specialist-search-checkbox {
+  margin-bottom: 20px;
   display: flex;
   align-items: flex-start;
   gap: 10px;
+
+}
+
+#form-terms {
+  display: inline-block;
+  vertical-align: middle;
   cursor: pointer;
-}
-
-.specialist-search .specialist-search-checkbox {
-  flex: 0 0 auto;
-  width: 18px;
-  height: 18px;
-  margin-top: 3px;
-  accent-color: var(--brand-cyan);
-}
-
-.specialist-search .specialist-search-checkmark {
-  display: none;
-}
-
-.specialist-search .specialist-search-terms-text,
-.specialist-search .specialist-search-terms-text p {
   margin: 0;
-  font-family: var(--body-font-family);
-  font-size: 16px;
-  color: var(--brand-grey);
+  width: 48px;
+  height: 24px;
+  border: 2px solid #4a5568; 
+  border-radius: 4px;
+  background-color: #ffffff;
+  accent-color: #3182ce; 
+  outline: 2px solid #000000;
+  outline-offset: -2px;
+  box-shadow: none;
 }
 
-.specialist-search .specialist-search-terms-text a {
-  color: var(--brand-cyan);
+#form-terms:hover {
+  border-color: #2b6cb0; 
+}
+
+#form-terms:focus-visible {
+  outline: 2px solid #2b6cb0;
+  outline-offset: 2px;
+}
+
+.specialist-search-checkbox input {
+  margin-top: 4px;
+  width: 16px;
+  height: 16px;
+  height: 25px;
+  width: 25px;
+  background-color: #fff;
+  border: 2px solid #2d2d2d;
+  border-radius: 3px;
+}
+
+.specialist-search-checkbox label {
+  font-size: 16px;
+  line-height: 1.5;
+  color: #58595b;
+  font-family: "Gotham-Medium";
+}
+
+.specialist-search-checkbox a {
+  color: #33a9df;
   text-decoration: none;
 }
 
-.specialist-search .specialist-search-submit {
+/* BUTTON */
+
+.specialist-search-submit {
   width: 100%;
-  align-self: flex-start;
-  border: 0;
-  border-radius: 0;
-  padding: 15px 10px;
-  background-color: var(--brand-cyan);
-  color: var(--brand-blue-dark);
-  font-family: var(--heading-heavy-font-family);
-  font-size: 18px;
-  box-shadow: var(--button-shadow);
+}
+
+.specialist-search-submit label {
+  display: none;
+}
+
+#form-submitbtn {
+  width: 100%;
+  height: 52px;
+  border: none;
   cursor: pointer;
-  transition:
-    box-shadow 0.2s ease-in-out,
-    background-color 0.2s ease-in-out,
-    color 0.2s ease-in-out;
+  background: #3cb0de;
+  position: relative;
+  font-weight: 700;
+  box-shadow: 1px 1px 0 #19527f, 2px 2px 0 #19527f, 3px 3px 0 #19527f, 4px 4px 0 #19527f, 5px 5px 0 #19527f;  margin-bottom: 15px;
+  font-size: 18px;
+  font-family: "Gotham-Black";
+  color: #1f4763;
 }
 
-.specialist-search .specialist-search-submit:hover,
-.specialist-search .specialist-search-submit:focus {
-  background-color: var(--brand-cyan-shadow);
-  color: #fff;
-  box-shadow: var(--button-hover-shadow);
+#form-submitbtn::after {
+  content: "SEARCH NOW";
+  color: #083a63;
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 15px;
+  font-weight: 700;
 }
 
-main .section.find-specialist > div > p {
+/* Erros Messages */
+.form-error{
+    color: red;
+    font-size: 14px;
+    font-weight: bold;
+    font-family: "Gotham-Medium";
+    display: block;
+    padding-bottom: 10px;
+    display: none;
+}
+
+/* RESULT SECTION */
+
+.cmp-specialist__result-section {
+  background: #fff;
+}
+
+.cmp-specialistsdetails .row{
+  border-bottom: 1px solid black;
+  margin-bottom: 40px;
+}
+
+.cmp-googlemap__maparea {
+  width: 100%;
+  height: 520px;
+}
+
+/* RESULT HEADER */
+
+.cmp-specialist__result {
+  padding: 30px 20px 10px;
+}
+
+.cmp-specialist__result > p {
+  text-align: center;
+  font-size: 20px;
+  font-family: 'Gotham-bold';
+  color: #245778;
+  font-weight: 700;
+  margin-bottom: 25px;
+
+}
+
+.cmp-result__doctormiles {
+  text-align: center;
+  margin-bottom: 15px;
+  font-size:18px;
+  font-family: 'Gotham-Medium';
+  color:#58595b;
+}
+
+#cmp-specialist__selectradius {
+  height: 25px;
+  font-size:18px;
+  font-family: 'Gotham-Medium';
+  border: 1px solid #ccc;
+  color: #58595b;
+  width:45px;
+  margin-right:5px;
+}
+
+/* DOCTOR LIST */
+
+.cmp-result__lists {
+  padding: 0 20px 30px;
+}
+
+.cmp-result__item {
+  padding: 25px 0;
+  border-bottom: 1px solid #ccc;
+}
+
+.cmp-result__item:last-child {
+  border-bottom: none;
+}
+
+.cmp-result__doctor-name {
+  font-weight: 700;
+  color: #333;
+  margin-bottom: 12px;
+  text-transform: uppercase;
+  
+}
+
+.cmp-coloumn__doctorname{
+  font-size: 16px;
+  font-family: 'Gotham-Bold';
+  color: #58595b;
+  padding-bottom: 15px;
+  font-weight: bold;
+}
+
+.cmp-coloumn__specialty{
+  font-size: 16px;
+  font-family: 'Gotham-Bold';
+  color: #58595b;
+  padding-bottom: 20px;
+  font-weight: bold;
+  font-style:italic;
+}
+
+.cmp-result__speciality {
+  color: #3b3b3b;
+  font-style: italic;
+  font-weight: 700;
+  margin-bottom: 12px;
+}
+
+.cmp-result__address {
+  color: #333;
+  line-height: 1.5;
+  margin-bottom: 12px;
+}
+.cmp-coloumn__address{
+  font-family:"Gotham-Medium";
+  color: #58595b;
   font-size: 16px;
 }
 
-main .section.find-specialist > div > p:last-child:not(:has(picture)) {
-  margin: 0;
-  padding: 50px 0;
+.cmp-addressContainer a{
+  font-family:"Gotham-Black";
+  font-size: 20px;
+  font-weight: bolder;
+  padding-left: 5px;
 }
 
-/* --------------------------------------------------
-   Result Panel
--------------------------------------------------- */
-
-.cmp-panel {
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-
-.cmp-panel.active {
-  background: #eef9fc;
-  border-left: 4px solid #00b5e2;
-}
-
-/* --------------------------------------------------
-   Specialist Details
--------------------------------------------------- */
-
-.cmp-specialistsdetails__coloumn {
+.cmp-coloumn__addressSection{
   display: flex;
 }
 
-.cmp-specialistsdetails__coloumn img {
-  transform-origin: center;
+.cmp-coloumn__addressSection img{
+  width: 60px;
+  height: 40px;
 }
 
-.cmp-coloumn__addressSection {
-  display: flex;
-  align-items: flex-start;
-  gap: 10px;
+.cmp-result__phone {
+  color: #32ace1;
+  font-weight: bold;
 }
 
-.cmp-coloumn__addressSection img {
-  width: 39px;
-  height: 47px;
-  flex-shrink: 0;
-  align-self: flex-start;
+.cmp-result__distance {
+  color: #58595b;
+  font-size:18px;
+  font-family: 'Gotham-Medium';
 }
 
-.specialist-search-form {
-  margin-right: 0;
+.cmp-result__zipCode{
+  font-weight: 800;
+  color: #58595b;
 }
 
-/* ══════════════════════════════════════════════════════════════
-   Tablet / Desktop (768px+)
-   ══════════════════════════════════════════════════════════════ */
+.cmp-coloumn__miles{
+  padding-bottom: 25px;
+  text-align: center;
+  padding-top: 20px;
+  font-size: 20px;
+  font-family: "Gotham-Black";
+  color: #58595b;
+}
 
-@media (min-width: 768px) {
-  .specialist-search {
-    flex-direction: row;        /* Restores side-by-side layering rules for desktop layout viewports */
+/* TABLET */
+
+@media (width >= 768px) {
+
+  .specialist-search.block {
+    min-height: 420px;
     justify-content: flex-end;
-    padding: 0;
-    min-height: 492px;          /* Re-applies desktop baseline wrapper dimension boundaries */
+    padding-right: 60px;
+    align-items: center;
   }
 
-  .specialist-search .specialist-search-form {
+  .specialist-search.block form {
+    width: 350px;
+    padding: 24px;
+  }
+
+  .cmp-googlemap__maparea {
+    height: 450px;
+  }
+
+  .cmp-specialist__result > p {
+    text-align: left;
+  }
+
+  .cmp-result__doctormiles {
+    text-align: left;
+  }
+}
+
+/* DESKTOP */
+
+@media (width >= 992px) {
+
+  .specialist-search-helper p{
+    font-size: 18px;
+  }
+
+  .specialist-search-zip::before {
+    content: "";
+    position: absolute;
+    left: 12px;
+    top: 65%;
+  }
+
+  .specialist-search-checkbox label{
+    font-size: 18px;
+  }
+
+  .specialist-search-zip input{
+    font-size: 18px;
+  }
+
+  #form-terms {
+    width: 80px;
+    border: 2px solid black;
+  }
+
+  .specialist-search.block {
+    min-height: 492px;
+    height: 492px;
+    padding: 40px 100px;
+  }
+
+  .specialist-search.block form {
     width: 385px;
-    max-width: 385px;
-    padding: 30px;
-    box-shadow: 0 3px 3px 4px rgb(0 0 0 / 20%); /* Restores shadow layer context */
-    margin-top: 0px;
+    position: absolute;
+    right: 140px;
+    top: 14%;
+    transform: translateY(-50%);
   }
 
-  .specialist-search-form {
-    margin-right: 40px;
+  .specialist-search-zip input{
+    margin-top: 20px;
   }
 
-  main .section.find-specialist > div > p {
-    font-size: var(--body-font-size-m);
+  .cmp-googlemap__maparea {
+    height: 500px;
   }
 
-  .specialist-search .specialist-search-helper {
-    font-size: var(--body-font-size-m);
-    line-height: 22px;
+  .cmp-specialist__result {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 40px 30px 10px;
   }
 
-  .specialist-search .specialist-search-terms-text,
-  .specialist-search .specialist-search-terms-text p {
-    font-size: var(--body-font-size-m);
-    line-height: 30px;
+  .cmp-result__lists {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 30px 60px;
+  }
+
+  .cmp-result__item {
+    display: grid;
+    grid-template-columns:
+      1.2fr
+      1fr
+      2fr
+      120px;
+    gap: 30px;
+    align-items: start;
+  }
+
+  .cmp-result__doctor-name,
+  .cmp-result__speciality,
+  .cmp-result__address,
+  .cmp-result__distance {
+    margin: 0;
+  }
+
+  .cmp-result__distance {
+    text-align: right;
   }
 }

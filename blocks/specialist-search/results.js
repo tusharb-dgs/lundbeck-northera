@@ -17,24 +17,21 @@ export function renderResults(resultSection, providers, zip) {
 
   const cards = list.querySelectorAll('.cmp-panel');
 
-  cards.forEach((card) => { card.addEventListener( 'click', () => {
+  cards.forEach((card) => {
+     card.addEventListener( 'click', () => {
+      const provider = providers.find( (item) =>
+          item.lundbeckID === card.dataset.providerId
+      );
 
-    const provider = providers.find( (item) =>
-        item.lundbeckID === card.dataset.providerId
-    );
-
-    if(provider){
-      showLocationOnMap( provider.latitude, provider.longitude, 15);
-      document.querySelector('.cmp-result__googlemap')?.scrollIntoView({
-        behavior: 'smooth',block: 'start'
-      });
-    }
-  },
-    );
+      if(provider){
+        showLocationOnMap( provider.latitude, provider.longitude, 15);
+        document.querySelector('.cmp-result__googlemap')?.scrollIntoView({
+          behavior: 'smooth',block: 'start'
+        });
+      }
+    });
   });
 }
-
-
 
 export function attachRadiusHandler( resultSection,coords,zip,config) {
   const radiusSelect = resultSection.querySelector( '#cmp-specialist__selectradius');
