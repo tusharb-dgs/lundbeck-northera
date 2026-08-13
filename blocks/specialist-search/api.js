@@ -1,4 +1,4 @@
-export async function getSpecialistData(coords, apiEndpoint, zipCode, miles = 10) {
+export default async function getSpecialistData(coords, apiEndpoint, zipCode, miles = 10) {
   const formData = new FormData();
 
   formData.append('zipLat', coords.lat);

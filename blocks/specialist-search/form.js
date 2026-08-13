@@ -1,8 +1,38 @@
 import { initFormValidation } from "../../scripts/form-validator.js";
-import { initializeMap, getCoordsAsync, showLocationOnMap } from './map.js';
-import { getSpecialistData } from './api.js';
+import { getCoordsAsync, showLocationOnMap } from './map.js';
+import getSpecialistData from './api.js';
 import { renderResults, attachRadiusHandler } from './results.js';
 import {config, resultSection } from './specialist-search.js';
+
+export async function submitForm(form) {
+  const zipInput = form.querySelector('.specialist-search-zip input');
+  const zip = zipInput.value.trim();
+  console.log("Zip code: ", zip);
+
+    try {
+      const coords = await getCoordsAsync(zip);
+      console.log( 'Received coordinates:'+ JSON.stringify(coords) );
+      showLocationOnMap( coords.lat, coords.lng, 10 );
+
+      const DEFAULT_RADIUS = 10;
+      const specialistData = await getSpecialistData(coords,config.apiEndpoint,zip,DEFAULT_RADIUS);
+      const providers = typeof specialistData.MemberList === 'string'
+        ? JSON.parse( specialistData.MemberList )
+        : specialistData.MemberList;
+
+      form.style.display = 'none';
+      resultSection.style.display = 'block';
+
+      renderResults( resultSection, providers, zip);
+      attachRadiusHandler( resultSection,coords,zip,config);
+
+    } catch (err) {
+      console.error(err);
+    }
+  
+    form.parentElement.style.backgroundImage = 'none';
+
+}
 
 export async function initValidationListeners(form) {
 
@@ -51,34 +81,3 @@ export async function initValidationListeners(form) {
 
 }
 
-export async function submitForm(form) {
-  const zipInput = form.querySelector('.specialist-search-zip input');
-  const checkbox = form.querySelector('.specialist-search-checkbox input');
-  const zip = zipInput.value.trim();
-  console.log("Zip code: ", zip);
-  var num = parseInt(zip, 10);
-
-    try {
-      const coords = await getCoordsAsync(zip);
-      console.log( 'Received coordinates:'+ JSON.stringify(coords) );
-      showLocationOnMap( coords.lat, coords.lng, 10 );
-
-      const DEFAULT_RADIUS = 10;
-      const specialistData = await getSpecialistData(coords,config.apiEndpoint,zip,DEFAULT_RADIUS);
-      const providers = typeof specialistData.MemberList === 'string'
-        ? JSON.parse( specialistData.MemberList )
-        : specialistData.MemberList;
-
-      form.style.display = 'none';
-      resultSection.style.display = 'block';
-
-      renderResults( resultSection, providers, zip);
-      attachRadiusHandler( resultSection,coords,zip,config);
-
-    } catch (err) {
-      console.error(err);
-    }
-  
-    form.parentElement.style.backgroundImage = 'none';
-
-}

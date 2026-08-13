@@ -1,7 +1,7 @@
 import { initValidationListeners, submitForm } from './form.js';
 import { createResultsSection } from './templates.js';
 import { initializeMap, getCoordsAsync, showLocationOnMap } from './map.js';
-import { getSpecialistData } from './api.js';
+import getSpecialistData from './api.js';
 import { renderResults } from './results.js';
 
 export let config = {};
